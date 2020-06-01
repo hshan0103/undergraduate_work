@@ -1,0 +1,79 @@
+S_0 <- 1
+sigma <-0.2
+sigma_square <- sigma^2
+r <- 0.02
+K <- 1.05
+T <- 1
+
+A <- log(S_0/K)
+B <- (r+(0.5*sigma_square))*T
+C <- sigma*(sqrt(T))
+
+d_pos <- (A+B)/C
+d_neg <- d_pos - C
+
+#Z¬ N(0,1)
+N_pos <- pnorm(d_pos,mean=0,sd=1)
+N_neg <- pnorm(d_neg,mean=0,sd=1)
+
+C_0 <- (S_0*N_pos)-(K*N_neg*exp(-r*T))
+C_0
+
+###########################################################################
+
+asset_price <- function(maturity,division,S_0,sigma,r){
+	delta_t <- maturity/division
+	sigma_square <- sigma^2
+	v=r-(sigma_square*0.5)
+	t <- seq(0,maturity,delta_t)
+	Z=rnorm(division,0,1)
+	S_t=c(1,rep(0,division))
+	for (i in 1:(length(t)-1)){
+		S_t[i+1]=S_t[i]*exp((v*delta_t)+(sigma*sqrt(delta_t)*Z[i]))
+	}
+return(S_t)
+}
+
+set.seed(0103)
+
+n <- 1000
+N1 <- 10000
+discounted <- rep(0,N1)
+for (i in 1:N1){
+	S <- asset_price(T,n,S_0,sigma,r)
+	S_T <- S[n]
+	payoff<- max(S_T-K,0)
+	discounted[i] <- payoff*exp(-r*T)
+}
+call_price <- mean(discounted);call_price
+error <- sd(discounted)/sqrt(N1);error
+CI=c((call_price-(1.96*error)),(call_price+(1.96*error)));CI
+
+###########################################################################
+
+knock_sample <- function(barrier,maturity,S_0,sigma,K,r,division,simulation){
+	discounted_2 <- rep(0,simulation)
+	for (i in 1:simulation){
+	trial <- asset_price(maturity,division,S_0,sigma,r)
+		if (min(trial)>barrier){
+			S_T <- trial[division]
+			payoff_knock <- max(S_T-K,0)
+		} else {
+			payoff_knock <- 0
+		}
+	discounted_2[i] <- payoff_knock*exp(-r*maturity)
+	}
+return(discounted_2)
+}
+
+
+L <- 0.9
+n2 <- 1000
+N2=1000000
+
+set.seed(1113)
+
+discounted_sample <- knock_sample(L,T,S_0,sigma,K,r,n2,N2)
+call_price_knock <- mean(discounted_sample);call_price_knock
+error_2 <- sd(discounted_sample)/sqrt(N2);error_2 
+CI_2=c((call_price_knock-(1.96*error_2)),(call_price_knock+(1.96*error_2)));CI_2
