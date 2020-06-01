@@ -12,7 +12,7 @@ C <- sigma*(sqrt(T))
 d_pos <- (A+B)/C
 d_neg <- d_pos - C
 
-#Z¬ N(0,1)
+#ZÂ¬ N(0,1)
 N_pos <- pnorm(d_pos,mean=0,sd=1)
 N_neg <- pnorm(d_neg,mean=0,sd=1)
 
