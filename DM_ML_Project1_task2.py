@@ -8,7 +8,7 @@ Created on Sun Sep 20 11:44:16 2020
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from task1 import np, training, chi_df, target, select_by_feature_importance
+from DM_ML_Project1_task1 import np, training, chi_df, target, select_by_feature_importance
 
 if __name__ == '__main__':
     rf = RandomForestClassifier(criterion = 'gini', random_state = 4661)
