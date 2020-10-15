@@ -69,12 +69,4 @@ if __name__ == '__main__':
     print('momentum', hyperparam.get('momentum'))
     
     
-#trainX, testX, trainY, testY = train_test_split(df, target, shuffle = True, test_size = 0.3, random_state = 4661)
-#model = Sequential()
-#model.add(Dense(units = 44, input_dim = 26, activation = 'relu'))
-#model.add(Dense(1, activation = 'sigmoid'))
-#opt = keras.optimizers.Adam(0.01)
-#model.compile(optimizer=opt, loss = 'binary_crossentropy', metrics = ['accuracy'])
-#z = model.fit(trainX, trainY, validation_data = (testX, testY), epochs = 1000, verbose = 0)
-#plt.plot(z.history['accuracy'])
-#plt.plot(z.history['val_accuracy'])
+
